@@ -1,0 +1,54 @@
+---
+### proxysql install
+proxysql_create_image: "{{ global_create_image | default(false) }}"
+proxysql_download_src: https://github.com/sysown/proxysql/releases/download
+proxysql_version: 1.3.6
+proxysql_upgrade_if_older_version: false
+
+proxysql_user: proxysql
+proxysql_group: proxysql
+proxysql_datadir: /var/lib/proxysql
+
+### Service Discovery
+proxysql_sd_user: "{{ global_sd_user | default('consul') }}"
+proxysql_sd_group: "{{ global_sd_group | default('consul') }}"
+proxysql_sd_config_dir: "{{ global_sd_log_dir | default('/etc/consul.d') }}"
+
+### admin variables
+proxysql_admin_user: admin
+proxysql_admin_password: admin
+proxysql_admin_stats_user: stats
+proxysql_admin_stats_password: stats
+proxysql_admin_bind_address: 127.0.0.1
+proxysql_admin_port: 6032
+proxysql_admin_socket: /tmp/proxysql_admin.sock
+
+proxysql_admin_refresh_interval: 2000
+proxysql_admin_read_only: False
+proxysql_admin_debug: False
+
+### mysql variables
+proxysql_mysql_bind_address: 0.0.0.0
+proxysql_mysql_port: 3306
+proxysql_mysql_socket: /tmp/proxysql.sock
+
+proxysql_mysql_threads: 4
+proxysql_mysql_max_connections: 2048
+proxysql_mysql_default_query_delay: 0
+proxysql_mysql_default_query_timeout: 36000000
+proxysql_mysql_have_compress: True
+proxysql_mysql_poll_timeout: 2000
+proxysql_mysql_default_schema: information_schema
+proxysql_mysql_stacksize: 1048576
+proxysql_mysql_server_version: 5.5.30
+proxysql_mysql_connect_timeout_server: 3000
+proxysql_mysql_monitor_history: 600000
+proxysql_mysql_monitor_connect_interval: 60000
+proxysql_mysql_monitor_ping_interval: 10000
+proxysql_mysql_monitor_read_only_interval: 1500
+proxysql_mysql_monitor_read_only_timeout: 500
+proxysql_mysql_ping_interval_server_msec: 120000
+proxysql_mysql_ping_timeout_server: 500
+proxysql_mysql_commands_stats: True
+proxysql_mysql_sessions_sort: True
+proxysql_mysql_connect_retries_on_failure: 10

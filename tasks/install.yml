@@ -1,0 +1,20 @@
+---
+- name: proxysql | install | update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 14400
+  changed_when: False
+
+- name: proxysql | install | install packages required by proxysql
+  apt:
+    name: "{{ item }}"
+    state: present
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  with_items:
+    - "{{ proxysql_additional_packages }}"
+
+- name: proxysql | install | install proxysql release
+  apt:
+    deb: "{{ proxysql_release }}"
+    state: present

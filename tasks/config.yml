@@ -1,0 +1,60 @@
+---
+- name: proxysql | config | copy client my.cnf
+  template:
+    src: client.my.cnf.j2
+    dest: ~/.my.cnf
+    mode: 0600
+
+- name: proxysql | config | copy proxysql config
+  template:
+    src: proxysql.cnf.j2
+    dest: /etc/proxysql.cnf
+    owner: "{{ proxysql_user }}"
+    group: "{{ proxysql_group }}"
+    mode: 0644
+  register: proxysql_config_status
+
+- name: proxysql | config | enable and start proxysql
+  service:
+    name: proxysql
+    state: "{{ proxysql_service_state }}"
+    enabled: yes
+
+- block:
+
+  - name: proxysql | config | manage admin config
+    proxysql_global_variables:
+      config_file: "~/.my.cnf"
+      variable: "admin-{{ item.value.variable }}"
+      value: "{{ item.value.variable_value }}"
+    with_dict: "{{ proxysql_admin_variables }}"
+
+  - name: proxysql | config | manage mysql config
+    proxysql_global_variables:
+      config_file: "~/.my.cnf"
+      variable: "mysql-{{ item.value.variable }}"
+      value: "{{ item.value.variable_value }}"
+    with_dict: "{{ proxysql_mysql_variables }}"
+
+  - name: proxysql | config | manage mysql options
+    proxysql_global_variables:
+      config_file: "~/.my.cnf"
+      variable: "mysql-{{ item.value.variable }}"
+      value: "{{ item.value.variable_value }}"
+      load_to_runtime: False
+      save_to_disk: True
+    with_dict: "{{ proxysql_mysql_options }}"
+    notify:
+      - restart proxysql
+
+  when: proxysql_config_status.changed and not proxysql_create_image
+
+- name: proxysql | config | create service config
+  template:
+    src: proxysql.json.j2
+    dest: "{{ proxysql_sd_config_dir }}/proxysql.json"
+    owner: "{{ proxysql_sd_user }}"
+    group: "{{ proxysql_sd_group }}"
+    mode: 0640
+  notify:
+    - reload consul

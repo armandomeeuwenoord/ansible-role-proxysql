@@ -1,0 +1,91 @@
+---
+### percona required packages
+proxysql_release: "{{ proxysql_download_src }}/v{{ proxysql_version }}/proxysql_{{ proxysql_version }}-ubuntu14_amd64.deb"
+
+proxysql_additional_packages:
+  - mysql-client-core-5.5
+  - python-mysqldb
+
+proxysql_admin_variables:
+  admin_credentials:
+    variable: "admin_credentials"
+    variable_value: "{{ proxysql_admin_user }}:{{ proxysql_admin_password }}"
+  mysql_ifaces:
+    variable: "mysql_ifaces"
+    variable_value: "{{ proxysql_admin_bind_address }}:{{ proxysql_admin_port }};{{ proxysql_admin_socket }}"
+  read_only:
+    variable: "read_only"
+    variable_value: "{{ proxysql_admin_read_only | to_json }}"
+  refresh_interval:
+    variable: "refresh_interval"
+    variable_value: "{{ proxysql_admin_refresh_interval }}"
+  stats_credentials:
+    variable: "stats_credentials"
+    variable_value: "{{ proxysql_admin_stats_user }}:{{ proxysql_admin_stats_password }}"
+
+proxysql_mysql_variables:
+  max_connections:
+    variable: "max_connections"
+    variable_value: "{{ proxysql_mysql_max_connections }}"
+  default_query_delay:
+    variable: "default_query_delay"
+    variable_value: "{{ proxysql_mysql_default_query_delay }}"
+  default_query_timeout:
+    variable: "default_query_timeout"
+    variable_value: "{{ proxysql_mysql_default_query_timeout }}"
+  have_compress:
+    variable: "have_compress"
+    variable_value: "{{ proxysql_mysql_have_compress | to_json }}"
+  mysql_interfaces:
+    variable: "interfaces"
+    variable_value: "{{ proxysql_mysql_bind_address }}:{{ proxysql_mysql_port }};{{ proxysql_mysql_socket }}"
+  poll_timeout:
+    variable: "poll_timeout"
+    variable_value: "{{ proxysql_mysql_poll_timeout }}"
+  default_schema:
+    variable: "default_schema"
+    variable_value: "{{ proxysql_mysql_default_schema }}"
+  server_version:
+    variable: "server_version"
+    variable_value: "{{ proxysql_mysql_server_version }}"
+  connect_timeout_server:
+    variable: "connect_timeout_server"
+    variable_value: "{{ proxysql_mysql_connect_timeout_server }}"
+  monitor_history:
+    variable: "monitor_history"
+    variable_value: "{{ proxysql_mysql_monitor_history }}"
+  monitor_connect_interval:
+    variable: "monitor_connect_interval"
+    variable_value: "{{ proxysql_mysql_monitor_connect_interval }}"
+  monitor_ping_interval:
+    variable: "monitor_ping_interval"
+    variable_value: "{{ proxysql_mysql_monitor_ping_interval }}"
+  monitor_read_only_interval:
+    variable: "monitor_read_only_interval"
+    variable_value: "{{ proxysql_mysql_monitor_read_only_interval }}"
+  monitor_read_only_timeout:
+    variable: "monitor_read_only_timeout"
+    variable_value: "{{ proxysql_mysql_monitor_read_only_timeout }}"
+  ping_interval_server_msec:
+    variable: "ping_interval_server_msec"
+    variable_value: "{{ proxysql_mysql_ping_interval_server_msec }}"
+  ping_timeout_server:
+    variable: "ping_timeout_server"
+    variable_value: "{{ proxysql_mysql_ping_timeout_server }}"
+  commands_stats:
+    variable: "commands_stats"
+    variable_value: "{{ proxysql_mysql_commands_stats | to_json }}"
+  sessions_sort:
+    variable: "sessions_sort"
+    variable_value: "{{ proxysql_mysql_sessions_sort | to_json }}"
+  connect_retries_on_failure:
+    variable: "connect_retries_on_failure"
+    variable_value: "{{ proxysql_mysql_connect_retries_on_failure }}"
+
+proxysql_mysql_options:
+  mysql_threads:
+    variable: "threads"
+    variable_value: "{{ proxysql_mysql_threads }}"
+  mysql_stacksize:
+    variable: "stacksize"
+    variable_value: "{{ proxysql_mysql_stacksize }}"

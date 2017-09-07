@@ -1,0 +1,17 @@
+---
+- block:
+
+  - include: setvars.yml
+
+  - block:
+
+    - include: users.yml
+    - include: install.yml
+
+    become: true
+    become_user: root
+
+  - include: config.yml
+
+  tags:
+    - proxysql

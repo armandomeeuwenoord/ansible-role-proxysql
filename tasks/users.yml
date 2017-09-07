@@ -1,0 +1,15 @@
+- name: proxysql | users | create group for proxysql
+  group:
+    name: "{{ proxysql_group }}"
+    system: yes
+    state: present
+
+- name: proxysql | users | create user for proxysql
+  user:
+    name: "{{ proxysql_user }}"
+    system: yes
+    group: "{{ proxysql_group }}"
+    comment: "Proxysql Service"
+    home: "{{ proxysql_datadir }}"
+    shell: /usr/sbin/nologin
+    state: present

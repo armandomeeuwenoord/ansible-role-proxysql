@@ -1,0 +1,15 @@
+datadir="{{ proxysql_datadir }}"
+
+admin_variables=
+{
+{% for config_item in proxysql_admin_variables|dictsort(false, 'value') %}
+		{{ config_item[1].variable }}={{ config_item[1].variable_value | to_json }}
+{% endfor %}
+}
+
+mysql_variables=
+{
+{% for config_item in proxysql_mysql_variables|dictsort(false, 'value') %}
+		{{ config_item[1].variable }}={{ config_item[1].variable_value | to_json }}
+{% endfor %}
+}

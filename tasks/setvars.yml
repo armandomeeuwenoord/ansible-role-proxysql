@@ -1,0 +1,9 @@
+---
+- name: proxysql | setvars | ensure service is stopped for imaging
+  set_fact:
+    proxysql_service_state: "{{ proxysql_create_image | ternary('stopped', 'started') }}"
+
+- name: proxysql | setvars | check if we'd want to upgrade
+  set_fact:
+    proxysql_install_state: 'latest'
+  when:
