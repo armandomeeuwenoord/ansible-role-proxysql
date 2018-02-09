@@ -20,34 +20,30 @@
     state: "{{ proxysql_service_state }}"
     enabled: yes
 
-- block:
+- name: proxysql | config | manage admin config
+  proxysql_global_variables:
+    config_file: "~/.my.cnf"
+    variable: "admin-{{ item.value.variable }}"
+    value: "{{ item.value.variable_value }}"
+  with_dict: "{{ proxysql_admin_variables }}"
 
-  - name: proxysql | config | manage admin config
-    proxysql_global_variables:
-      config_file: "~/.my.cnf"
-      variable: "admin-{{ item.value.variable }}"
-      value: "{{ item.value.variable_value }}"
-    with_dict: "{{ proxysql_admin_variables }}"
+- name: proxysql | config | manage mysql config
+  proxysql_global_variables:
+    config_file: "~/.my.cnf"
+    variable: "mysql-{{ item.value.variable }}"
+    value: "{{ item.value.variable_value }}"
+  with_dict: "{{ proxysql_mysql_variables }}"
 
-  - name: proxysql | config | manage mysql config
-    proxysql_global_variables:
-      config_file: "~/.my.cnf"
-      variable: "mysql-{{ item.value.variable }}"
-      value: "{{ item.value.variable_value }}"
-    with_dict: "{{ proxysql_mysql_variables }}"
-
-  - name: proxysql | config | manage mysql options
-    proxysql_global_variables:
-      config_file: "~/.my.cnf"
-      variable: "mysql-{{ item.value.variable }}"
-      value: "{{ item.value.variable_value }}"
-      load_to_runtime: False
-      save_to_disk: True
-    with_dict: "{{ proxysql_mysql_options }}"
-    notify:
-      - restart proxysql
-
-  when: proxysql_config_status.changed and not proxysql_create_image
+- name: proxysql | config | manage mysql options
+  proxysql_global_variables:
+    config_file: "~/.my.cnf"
+    variable: "mysql-{{ item.value.variable }}"
+    value: "{{ item.value.variable_value }}"
+    load_to_runtime: False
+    save_to_disk: True
+  with_dict: "{{ proxysql_mysql_options }}"
+  notify:
+    - restart proxysql
 
 - name: proxysql | config | create service config
   template:
